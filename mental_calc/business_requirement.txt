@@ -1,0 +1,12 @@
+# User Story 1
+As a user, I want to solve a random multiplication problem using mental calculation so I exercise my brain.
+
+# User Story 2
+As a user, I want to have access to my last attempts so I can see if I'm improving my brain skills over time
+
+# User Story 3
+As a user, I want to be motivated to keep solving the challenges every day and not abandon it easily. 
+
+
+
+
