@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.mental_calc.multiplication.serviceclients.GamificationServiceClient;
 import com.mental_calc.multiplication.user.User;
 import com.mental_calc.multiplication.user.UserRepository;
 
@@ -17,6 +18,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	private final UserRepository userRepository;
 	private final ChallengeAttemptRepository attemptRepository;
+	private final GamificationServiceClient gameClient;
 	
 	@Override
 	public ChallengeAttempt testAttempt(ChallengeAttemptDTO attemptDTO) {
@@ -35,6 +37,10 @@ public class ChallengeServiceImpl implements ChallengeService {
 		
 		//save attempt
 		attemptRepository.save(testedAttempt);
+		
+		//send attempt to gamification and log response
+		boolean status = gameClient.sendAttepmt(testedAttempt);
+		log.info("Gamification response : {}", status);
 		
 		return testedAttempt;
 	}

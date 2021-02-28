@@ -11,6 +11,7 @@ import com.mental_calc.multiplication.challenge.ChallengeAttemptDTO;
 import com.mental_calc.multiplication.challenge.ChallengeAttemptRepository;
 import com.mental_calc.multiplication.challenge.ChallengeService;
 import com.mental_calc.multiplication.challenge.ChallengeServiceImpl;
+import com.mental_calc.multiplication.serviceclients.GamificationServiceClient;
 import com.mental_calc.multiplication.user.User;
 import com.mental_calc.multiplication.user.UserRepository;
 
@@ -32,10 +33,12 @@ public class ChallengeServiceTest {
 	private UserRepository userRepository;
 	@Mock
 	private ChallengeAttemptRepository attemptRepository;
+	@Mock
+	private GamificationServiceClient gameClient;
 	
 	@BeforeEach
 	public void setUp() {
-		challengeService = new ChallengeServiceImpl(userRepository, attemptRepository);
+		challengeService = new ChallengeServiceImpl(userRepository, attemptRepository, gameClient);
 		
 		//Instead of carry out the real save action, returns only the first argument from input
 		given(attemptRepository.save(any())).will(returnsFirstArg());
@@ -52,6 +55,8 @@ public class ChallengeServiceTest {
 		then(resultAttempt.isCorrect()).isTrue();
 		verify(userRepository).save(new User("john_doe"));
 		verify(attemptRepository).save(resultAttempt);
+		
+		verify (gameClient).sendAttepmt(resultAttempt);
 	}
 	//Test false condition
 	@Test

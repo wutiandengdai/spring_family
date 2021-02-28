@@ -9,8 +9,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.mental_calc.multiplication.challenge.Challenge;
-import com.mental_calc.multiplication.challenge.ChallengeGeneratorService;
-import com.mental_calc.multiplication.challenge.ChallengeGeneratorServiceImpl;
+import com.mental_calc.multiplication.challenge.generator.ChallengeGeneratorService;
+import com.mental_calc.multiplication.challenge.generator.ChallengeGeneratorServiceImpl;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
