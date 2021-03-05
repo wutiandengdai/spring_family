@@ -3,7 +3,7 @@ package com.mental_calc.gamification.game.badgeprocessors;
 import java.util.List;
 import java.util.Optional;
 
-import com.mental_calc.gamification.challenge.ChallengeSolvedDTO;
+import com.mental_calc.gamification.challenge.ChallengeSolvedEvent;
 import com.mental_calc.gamification.game.domain.BadgeType;
 import com.mental_calc.gamification.game.domain.ScoreCard;
 
@@ -19,7 +19,7 @@ public interface BadgeProcessor {
 	Optional<BadgeType> processForOptionBadge(
 			int currentScore,
 			List<ScoreCard> scoreCardList,
-			ChallengeSolvedDTO solved);
+			ChallengeSolvedEvent solved);
 	
 	BadgeType badgeType();
 }

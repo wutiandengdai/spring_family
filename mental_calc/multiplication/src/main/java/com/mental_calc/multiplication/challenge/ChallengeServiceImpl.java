@@ -2,9 +2,10 @@ package com.mental_calc.multiplication.challenge;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
-import com.mental_calc.multiplication.serviceclients.GamificationServiceClient;
 import com.mental_calc.multiplication.user.User;
 import com.mental_calc.multiplication.user.UserRepository;
 
@@ -18,8 +19,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	private final UserRepository userRepository;
 	private final ChallengeAttemptRepository attemptRepository;
-	private final GamificationServiceClient gameClient;
+	private final ChallengeEventPub challengeEventPub;
 	
+	/**
+	 * Java Transaction API
+	 * when publish failed, DB will roll back
+	 */
+	@Transactional
 	@Override
 	public ChallengeAttempt testAttempt(ChallengeAttemptDTO attemptDTO) {
 		boolean isCorrect = attemptDTO.getGuess() == attemptDTO.getFactorA() * attemptDTO.getFactorB();
@@ -32,16 +38,15 @@ public class ChallengeServiceImpl implements ChallengeService {
 					}
 				);
 		
-		ChallengeAttempt testedAttempt = new ChallengeAttempt (0l, user, attemptDTO.getFactorA(),
+		//use null for generated attemptId
+		ChallengeAttempt testedAttempt = new ChallengeAttempt (null, user, attemptDTO.getFactorA(),
 				attemptDTO.getFactorB(), attemptDTO.getGuess(), isCorrect);
 		
 		//save attempt
 		attemptRepository.save(testedAttempt);
 		
-		//send attempt to gamification and log response
-		boolean status = gameClient.sendAttepmt(testedAttempt);
-		log.info("Gamification response : {}", status);
-		
+		//publish an attempt
+		challengeEventPub.challengeSolved(testedAttempt);
 		return testedAttempt;
 	}
 

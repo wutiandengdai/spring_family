@@ -6,9 +6,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
-import com.mental_calc.gamification.challenge.ChallengeSolvedDTO;
+import com.mental_calc.gamification.challenge.ChallengeSolvedEvent;
 import com.mental_calc.gamification.game.badgeprocessors.BadgeProcessor;
 import com.mental_calc.gamification.game.domain.BadgeCard;
 import com.mental_calc.gamification.game.domain.BadgeType;
@@ -28,8 +30,12 @@ public class GameServiceImpl implements GameService {
 	//Spring collects all spring beans (@Component) for @Service, @Repository, @Controller
 	private final List<BadgeProcessor> badgeProcessors;
 	
+	/**
+	 * Badges and scores will be updated in transaction
+	 */
+	@Transactional
 	@Override
-	public GameResult newAttempt(final ChallengeSolvedDTO challenge) {
+	public GameResult newAttempt(final ChallengeSolvedEvent challenge) {
 		if(challenge.isCorrect() ) {
 			ScoreCard scoreCard = new ScoreCard(challenge.getUserId(), challenge.getAttemptId());
 			scoreRepository.save(scoreCard);
@@ -47,7 +53,7 @@ public class GameServiceImpl implements GameService {
 		}
 	}
 	
-	private List<BadgeCard> processForBadges( final ChallengeSolvedDTO solvedChallenge){
+	private List<BadgeCard> processForBadges( final ChallengeSolvedEvent solvedChallenge){
 		Optional<Integer> optTotalScore = scoreRepository.getTotalScoreForUser(solvedChallenge.getUserId());
 		if (optTotalScore.isEmpty()) {
 			return Collections.emptyList();

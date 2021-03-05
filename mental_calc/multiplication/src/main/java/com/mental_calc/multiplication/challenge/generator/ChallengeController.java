@@ -1,6 +1,5 @@
 package com.mental_calc.multiplication.challenge.generator;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/challenges")
-@CrossOrigin(origins = "http://localhost:3000")
 public class ChallengeController {
 
 	//requiredArgsConstructor create a constructor with challengeGeneratorService as argument, 

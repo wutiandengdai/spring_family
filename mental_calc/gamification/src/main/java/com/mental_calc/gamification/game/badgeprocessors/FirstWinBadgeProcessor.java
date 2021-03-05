@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.mental_calc.gamification.challenge.ChallengeSolvedDTO;
+import com.mental_calc.gamification.challenge.ChallengeSolvedEvent;
 import com.mental_calc.gamification.game.domain.BadgeType;
 import com.mental_calc.gamification.game.domain.ScoreCard;
 
@@ -14,15 +14,15 @@ public class FirstWinBadgeProcessor implements BadgeProcessor {
 
 	@Override
 	public Optional<BadgeType> processForOptionBadge(int currentScore, List<ScoreCard> scoreCardList,
-			ChallengeSolvedDTO solved) {
-		return currentScore > 400 ?
+			ChallengeSolvedEvent solved) {
+		return scoreCardList.size() == 1 ?
 				Optional.of(badgeType()):
 				Optional.empty();
 	}
 
 	@Override
 	public BadgeType badgeType() {
-		return BadgeType.GOLD;
+		return BadgeType.FIRST_WIN;
 	}
 
 }

@@ -6,12 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.mental_calc.multiplication.challenge.ChallengeAttempt;
-import com.mental_calc.multiplication.challenge.ChallengeAttemptDTO;
-import com.mental_calc.multiplication.challenge.ChallengeAttemptRepository;
-import com.mental_calc.multiplication.challenge.ChallengeService;
-import com.mental_calc.multiplication.challenge.ChallengeServiceImpl;
-import com.mental_calc.multiplication.serviceclients.GamificationServiceClient;
 import com.mental_calc.multiplication.user.User;
 import com.mental_calc.multiplication.user.UserRepository;
 
@@ -34,11 +28,11 @@ public class ChallengeServiceTest {
 	@Mock
 	private ChallengeAttemptRepository attemptRepository;
 	@Mock
-	private GamificationServiceClient gameClient;
+	private ChallengeEventPub challengeEventPub;
 	
 	@BeforeEach
 	public void setUp() {
-		challengeService = new ChallengeServiceImpl(userRepository, attemptRepository, gameClient);
+		challengeService = new ChallengeServiceImpl(userRepository, attemptRepository, challengeEventPub);
 		
 		//Instead of carry out the real save action, returns only the first argument from input
 		given(attemptRepository.save(any())).will(returnsFirstArg());
@@ -56,7 +50,6 @@ public class ChallengeServiceTest {
 		verify(userRepository).save(new User("john_doe"));
 		verify(attemptRepository).save(resultAttempt);
 		
-		verify (gameClient).sendAttepmt(resultAttempt);
 	}
 	//Test false condition
 	@Test
